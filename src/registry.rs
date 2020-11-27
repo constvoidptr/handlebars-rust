@@ -706,6 +706,29 @@ mod test {
 
             dir.close().unwrap();
         }
+
+        {
+            // Test if Unix path separators work
+
+            // Needed directory paths
+            let dir = tempdir().unwrap();
+            let sub_dir = &dir.path().join("partials/");
+
+            // Create sub directory
+            DirBuilder::new().create(&sub_dir).unwrap();
+
+            // Create .hbs file
+            let file_path = sub_dir.join("t10.hbs");
+            let mut file: File = File::create(&file_path).unwrap();
+            writeln!(file, "<h1>Hello {{world}}!</h1>").unwrap();
+
+            // Register directory
+            r.register_templates_directory(".hbs", &sub_dir).unwrap();
+
+            assert!(r.templates.contains_key("t10"), "Registry does not contain the anticipated template.");
+
+            dir.close().unwrap();
+        }
     }
 
     #[test]
