@@ -28,6 +28,7 @@ pest_derive = "2.1.0"
 serde = "1.0.0"
 serde_json = "1.0.39"
 walkdir = { version = "2.2.3", optional = true }
+path-slash = { version = "0.1.3", optional = true }
 rhai = { version = "0.19.4", optional = true, features = ["sync", "serde"] }
 
 [dev-dependencies]
@@ -41,7 +42,7 @@ criterion = "0.3"
 pprof = { version = "0.3.13", features = ["flamegraph", "protobuf"] }
 
 [features]
-dir_source = ["walkdir"]
+dir_source = ["walkdir", "path-slash"]
 script_helper = ["rhai"]
 no_logging = []
 default = []
