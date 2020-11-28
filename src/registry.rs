@@ -698,24 +698,28 @@ mod test {
         }
 
         {
-            // Test if Unix path separators work
+            // Test if register_templates_directory is system agnostic
 
-            // Needed directory paths
+            // Temp directory path
             let dir = tempdir().unwrap();
-            let sub_dir = &dir.path().join("partials/");
 
             // Create sub directory
+            let sub_dir = &dir.path().join(r"partials/"); // <- Unix separator
+            DirBuilder::new().create(&sub_dir).unwrap();
+
+            let sub_dir = sub_dir.join(r"french\"); // <- Windows separator
             DirBuilder::new().create(&sub_dir).unwrap();
 
             // Create .hbs file
             let file_path = sub_dir.join("t10.hbs");
             let mut file: File = File::create(&file_path).unwrap();
-            writeln!(file, "<h1>Hello {{world}}!</h1>").unwrap();
+            writeln!(file, "<h1>Bonjour {{world}}!</h1>").unwrap();
 
             // Register directory
-            r.register_templates_directory(".hbs", &sub_dir).unwrap();
+            r.register_templates_directory(".hbs", &dir).unwrap();
+            //dbg!(&r);
 
-            assert!(r.templates.contains_key("t10"), "Registry does not contain the anticipated template.");
+            assert!(r.templates.contains_key("partials/french/t10"), "Registry does not contain the anticipated template.");
 
             dir.close().unwrap();
         }
