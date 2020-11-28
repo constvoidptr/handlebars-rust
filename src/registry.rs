@@ -236,7 +236,7 @@ impl<'reg> Registry<'reg> {
     #[cfg(feature = "dir_source")]
     pub fn register_templates_directory<P>(
         &mut self,
-        tpl_extension: &'static str,
+        tpl_extension: &str,
         dir_path: P,
     ) -> Result<(), TemplateFileError>
     where
